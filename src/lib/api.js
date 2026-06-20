@@ -33,4 +33,12 @@ export const api = {
     }),
 
   me: () => apiRequest("/api/auth/me"),
+
+  getProfile: () => apiRequest("/api/profile/me"),
+
+  updateProfile: (profileData) =>
+    apiRequest("/api/profile/me", {
+      method: "PATCH",
+      body: JSON.stringify(profileData),
+    }),
 };
