@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import { bloodGroups } from "@/constants/bloodGroups";
 import { api } from "@/lib/api";
+import { uploadImageToImgBB } from "@/lib/imgbb";
 
 const emptyForm = {
   name: "",
@@ -22,6 +23,7 @@ const emptyForm = {
 export default function RegisterForm() {
   const router = useRouter();
   const [formData, setFormData] = useState(emptyForm);
+  const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   function handleChange(event) {
@@ -32,6 +34,11 @@ export default function RegisterForm() {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (!avatarFile) {
+      toast.error("Please choose an avatar");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -39,10 +46,12 @@ export default function RegisterForm() {
 
     try {
       setLoading(true);
+      const avatarUrl = await uploadImageToImgBB(avatarFile);
+
       await api.register({
         name: formData.name,
         email: formData.email,
-        avatar: formData.avatar,
+        avatar: avatarUrl,
         bloodGroup: formData.bloodGroup,
         district: formData.district,
         upazila: formData.upazila,
@@ -91,15 +100,14 @@ export default function RegisterForm() {
 
       <div className="grid gap-2">
         <label className="text-sm font-semibold text-[#49312d]" htmlFor="avatar">
-          Avatar URL
+          Avatar
         </label>
         <input
           id="avatar"
-          name="avatar"
-          value={formData.avatar}
-          onChange={handleChange}
+          type="file"
+          accept="image/*"
+          onChange={(event) => setAvatarFile(event.target.files[0])}
           className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none focus:border-[#b42318]"
-          placeholder="https://example.com/avatar.jpg"
         />
       </div>
 
