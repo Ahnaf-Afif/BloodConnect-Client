@@ -41,4 +41,10 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(profileData),
     }),
+
+  createDonationRequest: (requestData) =>
+    apiRequest("/api/donation-requests", {
+      method: "POST",
+      body: JSON.stringify(requestData),
+    }),
 };
