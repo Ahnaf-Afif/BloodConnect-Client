@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { uploadImageToImgBB } from "@/lib/imgbb";
+
 import { toast } from "react-toastify";
 
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
@@ -18,6 +20,7 @@ const emptyProfile = {
 
 export default function ProfileForm() {
   const [profile, setProfile] = useState(emptyProfile);
+  const [avatarFile, setAvatarFile] = useState(null);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -54,9 +57,14 @@ export default function ProfileForm() {
 
     try {
       setSaving(true);
+      let avatarUrl = profile.avatar;
+      if (avatarFile) {
+        avatarUrl = await uploadImageToImgBB(avatarFile);
+      }
+
       const result = await api.updateProfile({
         name: profile.name,
-        avatar: profile.avatar,
+        avatar: avatarUrl,
         bloodGroup: profile.bloodGroup,
         district: profile.district,
         upazila: profile.upazila,
@@ -93,7 +101,9 @@ export default function ProfileForm() {
           <div
             className="size-16 rounded-full bg-[#fff3f0] bg-cover bg-center ring-2 ring-[#f0d3cf]"
             style={
-              profile.avatar ? { backgroundImage: `url(${profile.avatar})` } : {}
+              profile.avatar
+                ? { backgroundImage: `url(${profile.avatar})` }
+                : {}
             }
           />
 
@@ -129,16 +139,28 @@ export default function ProfileForm() {
           disabled
           onChange={handleChange}
         />
-        <ProfileInput
-          label="Avatar URL"
-          name="avatar"
-          value={profile.avatar}
-          disabled={!editable}
-          onChange={handleChange}
-        />
+        <div className="grid gap-2">
+          <label
+            className="text-sm font-semibold text-[#49312d]"
+            htmlFor="avatar"
+          >
+            Avatar
+          </label>
+          <input
+            id="avatar"
+            type="file"
+            accept="image/*"
+            onChange={(event) => setAvatarFile(event.target.files[0])}
+            disabled={!editable}
+            className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842]"
+          />
+        </div>
 
         <div className="grid gap-2">
-          <label className="text-sm font-semibold text-[#49312d]" htmlFor="bloodGroup">
+          <label
+            className="text-sm font-semibold text-[#49312d]"
+            htmlFor="bloodGroup"
+          >
             Blood Group
           </label>
           <select
