@@ -47,4 +47,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify(requestData),
     }),
+
+  getDonationRequests: (query = "") =>
+    apiRequest(`/api/donation-requests${query}`),
 };
