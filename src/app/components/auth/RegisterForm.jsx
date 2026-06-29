@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { bloodGroups } from "@/constants/bloodGroups";
+import DistrictSelect from "@/app/components/common/DistrictSelect";
 import { api } from "@/lib/api";
 import { uploadImageToImgBB } from "@/lib/imgbb";
 
@@ -28,14 +29,29 @@ export default function RegisterForm() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((current) => ({ ...current, [name]: value }));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (!formData.name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error("Please enter your email");
+      return;
+    }
+
     if (!avatarFile) {
       toast.error("Please choose an avatar");
+      return;
+    }
+
+    if (!formData.bloodGroup || !formData.district || !formData.upazila) {
+      toast.error("Please complete your blood group and location details");
       return;
     }
 
@@ -132,33 +148,16 @@ export default function RegisterForm() {
           </select>
         </div>
 
-        <div className="grid gap-2">
-          <label className="text-sm font-semibold text-[#49312d]" htmlFor="district">
-            District
-          </label>
-          <input
-            id="district"
-            name="district"
-            value={formData.district}
-            onChange={handleChange}
-            className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none focus:border-[#b42318]"
-            placeholder="Dhaka"
-          />
-        </div>
-
-        <div className="grid gap-2">
-          <label className="text-sm font-semibold text-[#49312d]" htmlFor="upazila">
-            Upazila
-          </label>
-          <input
-            id="upazila"
-            name="upazila"
-            value={formData.upazila}
-            onChange={handleChange}
-            className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none focus:border-[#b42318]"
-            placeholder="Savar"
-          />
-        </div>
+        <DistrictSelect
+          district={formData.district}
+          upazila={formData.upazila}
+          onDistrictChange={(value) =>
+            setFormData((current) => ({ ...current, district: value, upazila: "" }))
+          }
+          onUpazilaChange={(value) =>
+            setFormData((current) => ({ ...current, upazila: value }))
+          }
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

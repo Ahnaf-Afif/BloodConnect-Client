@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
+import DistrictSelect from "@/app/components/common/DistrictSelect";
 import { bloodGroups } from "@/constants/bloodGroups";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { api } from "@/lib/api";
@@ -29,11 +30,30 @@ export default function DonationRequestForm() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((current) => ({ ...current, [name]: value }));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    const requiredFields = [
+      ["recipientName", "Recipient name"],
+      ["recipientDistrict", "District"],
+      ["recipientUpazila", "Upazila"],
+      ["hospitalName", "Hospital name"],
+      ["fullAddress", "Full address"],
+      ["bloodGroup", "Blood group"],
+      ["donationDate", "Donation date"],
+      ["donationTime", "Donation time"],
+      ["requestMessage", "Request message"],
+    ];
+
+    const missingField = requiredFields.find(([field]) => !String(formData[field]).trim());
+
+    if (missingField) {
+      toast.error(`${missingField[1]} is required`);
+      return;
+    }
 
     try {
       setSaving(true);
@@ -54,7 +74,7 @@ export default function DonationRequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-6 rounded-lg bg-white p-6 shadow-sm ring-1 ring-[#f0d3cf]"
+      className="mt-8 rounded-2xl bg-white p-8 shadow-lg ring-1 ring-[#f0d3cf]/50"
     >
       <div className="grid gap-4 md:grid-cols-2">
         <FormInput label="Requester Name" value={user?.name || ""} disabled />
@@ -67,20 +87,22 @@ export default function DonationRequestForm() {
           onChange={handleChange}
           placeholder="Patient name"
         />
-        <FormInput
-          label="Recipient District"
-          name="recipientDistrict"
-          value={formData.recipientDistrict}
-          onChange={handleChange}
-          placeholder="Dhaka"
+
+        <DistrictSelect
+          district={formData.recipientDistrict}
+          upazila={formData.recipientUpazila}
+          onDistrictChange={(value) =>
+            setFormData((current) => ({
+              ...current,
+              recipientDistrict: value,
+              recipientUpazila: "",
+            }))
+          }
+          onUpazilaChange={(value) =>
+            setFormData((current) => ({ ...current, recipientUpazila: value }))
+          }
         />
-        <FormInput
-          label="Recipient Upazila"
-          name="recipientUpazila"
-          value={formData.recipientUpazila}
-          onChange={handleChange}
-          placeholder="Savar"
-        />
+
         <FormInput
           label="Hospital Name"
           name="hospitalName"
@@ -150,7 +172,7 @@ export default function DonationRequestForm() {
       <button
         type="submit"
         disabled={saving}
-        className="mt-6 rounded-md bg-[#b42318] px-5 py-3 font-semibold text-white disabled:bg-[#d99b94]"
+        className="mt-8 rounded-lg bg-gradient-to-r from-[#b42318] to-[#8a1810] px-8 py-4 font-bold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:bg-[#d99b94] disabled:cursor-not-allowed"
       >
         {saving ? "Creating..." : "Request Blood"}
       </button>
@@ -161,7 +183,7 @@ export default function DonationRequestForm() {
 function FormInput({ label, name, value, onChange, disabled, placeholder, type = "text" }) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-semibold text-[#49312d]" htmlFor={name}>
+      <label className="text-sm font-bold text-[#49312d] uppercase tracking-wide" htmlFor={name}>
         {label}
       </label>
       <input
@@ -172,7 +194,7 @@ function FormInput({ label, name, value, onChange, disabled, placeholder, type =
         disabled={disabled}
         onChange={onChange}
         placeholder={placeholder}
-        className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842] focus:border-[#b42318]"
+        className="rounded-lg border-2 border-[#e8c5bf] px-4 py-3 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842] focus:border-[#b42318] focus:ring-2 focus:ring-[#b42318]/20 transition-all"
       />
     </div>
   );

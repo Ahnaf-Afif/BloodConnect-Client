@@ -22,20 +22,24 @@ export const dashboardLinks = [
     label: "Create Request",
     href: "/dashboard/create-donation-request",
     icon: FaPlusCircle,
+    donorOnly: true,
   },
   {
     label: "My Requests",
     href: "/dashboard/my-donation-requests",
     icon: FaClipboardList,
+    donorOnly: true,
   },
   {
     label: "All Requests",
     href: "/dashboard/all-blood-donation-request",
     icon: FaHandHoldingHeart,
+    volunteerOrAdmin: true,
   },
   {
     label: "All Users",
     href: "/dashboard/all-users",
     icon: FaUsers,
+    adminOnly: true,
   },
 ];

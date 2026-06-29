@@ -6,6 +6,7 @@ import { uploadImageToImgBB } from "@/lib/imgbb";
 import { toast } from "react-toastify";
 
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
+import DistrictSelect from "@/app/components/common/DistrictSelect";
 import { bloodGroups } from "@/constants/bloodGroups";
 import { api } from "@/lib/api";
 
@@ -49,11 +50,21 @@ export default function ProfileForm() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setProfile({ ...profile, [name]: value });
+    setProfile((current) => ({ ...current, [name]: value }));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (!profile.name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    if (!profile.bloodGroup || !profile.district || !profile.upazila) {
+      toast.error("Please complete your blood group and location details");
+      return;
+    }
 
     try {
       setSaving(true);
@@ -180,19 +191,16 @@ export default function ProfileForm() {
           </select>
         </div>
 
-        <ProfileInput
-          label="District"
-          name="district"
-          value={profile.district}
+        <DistrictSelect
+          district={profile.district}
+          upazila={profile.upazila}
           disabled={!editable}
-          onChange={handleChange}
-        />
-        <ProfileInput
-          label="Upazila"
-          name="upazila"
-          value={profile.upazila}
-          disabled={!editable}
-          onChange={handleChange}
+          onDistrictChange={(value) =>
+            setProfile((current) => ({ ...current, district: value, upazila: "" }))
+          }
+          onUpazilaChange={(value) =>
+            setProfile((current) => ({ ...current, upazila: value }))
+          }
         />
       </div>
 
