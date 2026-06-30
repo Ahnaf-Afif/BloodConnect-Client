@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { FaRightFromBracket, FaUsers } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 import { dashboardLinks } from "@/constants/dashboardLinks";
@@ -31,10 +32,21 @@ export default function DashboardSidebar() {
   }
 
   return (
-    <aside className="border-b border-[#f0d3cf] bg-white px-5 py-4 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
-      <Link href="/" className="text-2xl font-bold text-[#b42318]">
-        BloodConnect
-      </Link>
+    <aside className="border-b border-[#f0d3cf] bg-gradient-to-b from-white to-[#fff8f6] px-5 py-5 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
+      <div className="rounded-2xl bg-gradient-to-r from-[#b42318] to-[#8a1810] p-4 text-white shadow-lg">
+        <Link href="/" className="text-2xl font-bold">
+          🩸 BloodConnect
+        </Link>
+        <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/15 p-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+            <FaUsers />
+          </div>
+          <div>
+            <p className="text-sm font-semibold">{user?.name || "Welcome"}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-white/80">{user?.role || "Member"}</p>
+          </div>
+        </div>
+      </div>
 
       <nav className="mt-6 grid gap-2">
         {links.map((link) => {
@@ -45,9 +57,9 @@ export default function DashboardSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold ${
+              className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${
                 isActive
-                  ? "bg-[#b42318] text-white"
+                  ? "bg-[#b42318] text-white shadow-md"
                   : "text-[#49312d] hover:bg-[#fff3f0]"
               }`}
             >
@@ -60,8 +72,9 @@ export default function DashboardSidebar() {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-semibold text-[#49312d] hover:bg-[#fff3f0]"
+          className="mt-2 flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-[#49312d] transition hover:bg-[#fff3f0]"
         >
+          <FaRightFromBracket />
           Logout
         </button>
       </nav>
