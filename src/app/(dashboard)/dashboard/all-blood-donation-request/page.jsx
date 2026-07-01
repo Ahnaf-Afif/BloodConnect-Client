@@ -21,13 +21,12 @@ export default function AllBloodDonationRequestPage() {
 
   const isVolunteer = user?.role === "volunteer";
 
-  async function loadRequests() {
+  async function loadRequests(showLoading = true) {
     try {
-      setLoading(true);
-      let query = `?page=${page}&limit=${limit}`;
-      if (status) {
-        query += `&status=${status}`;
+      if (showLoading) {
+        setLoading(true);
       }
+      const query = makeQuery(page, limit, status);
       const result = await api.getAllDonationRequests(query);
       setRequests(result.data.items);
       setTotal(result.data.total);
@@ -43,10 +42,7 @@ export default function AllBloodDonationRequestPage() {
       return;
     }
 
-    let query = `?page=${page}&limit=${limit}`;
-    if (status) {
-      query += `&status=${status}`;
-    }
+    const query = makeQuery(page, limit, status);
 
     api
       .getAllDonationRequests(query)
@@ -102,7 +98,7 @@ export default function AllBloodDonationRequestPage() {
           <DonationRequestTable
             requests={requests}
             mode={isVolunteer ? "volunteer" : "admin"}
-            onRefresh={loadRequests}
+            onRefresh={() => loadRequests(false)}
           />
         )}
       </div>
@@ -133,4 +129,14 @@ export default function AllBloodDonationRequestPage() {
       </main>
     </RoleGuard>
   );
+}
+
+function makeQuery(page, limit, status) {
+  let query = `?page=${page}&limit=${limit}`;
+
+  if (status) {
+    query += `&status=${status}`;
+  }
+
+  return query;
 }

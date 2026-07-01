@@ -19,13 +19,12 @@ export default function MyDonationRequestsPage() {
   const [total, setTotal] = useState(0);
   const limit = 5;
 
-  async function loadRequests() {
+  async function loadRequests(showLoading = true) {
     try {
-      setLoading(true);
-      let query = `?page=${page}&limit=${limit}`;
-      if (status) {
-        query += `&status=${status}`;
+      if (showLoading) {
+        setLoading(true);
       }
+      const query = makeQuery(page, limit, status);
       const result = await api.getMyDonationRequests(query);
       setRequests(result.data.items);
       setTotal(result.data.total);
@@ -41,10 +40,7 @@ export default function MyDonationRequestsPage() {
       return;
     }
 
-    let query = `?page=${page}&limit=${limit}`;
-    if (status) {
-      query += `&status=${status}`;
-    }
+    const query = makeQuery(page, limit, status);
 
     api
       .getMyDonationRequests(query)
@@ -107,7 +103,7 @@ export default function MyDonationRequestsPage() {
           <DonationRequestTable
             requests={requests}
             mode="my"
-            onRefresh={loadRequests}
+            onRefresh={() => loadRequests(false)}
           />
         )}
       </div>
@@ -144,4 +140,14 @@ export default function MyDonationRequestsPage() {
       </Link>
     </main>
   );
+}
+
+function makeQuery(page, limit, status) {
+  let query = `?page=${page}&limit=${limit}`;
+
+  if (status) {
+    query += `&status=${status}`;
+  }
+
+  return query;
 }

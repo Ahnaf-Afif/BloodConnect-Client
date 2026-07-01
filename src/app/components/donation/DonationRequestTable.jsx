@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { FaCheck, FaEye, FaPen, FaTrash, FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
+import ConfirmModal from "@/app/components/common/ConfirmModal";
+import DonationStatusBadge from "./DonationStatusBadge";
 import { api } from "@/lib/api";
 
 export default function DonationRequestTable({
@@ -12,6 +15,7 @@ export default function DonationRequestTable({
   onRefresh,
 }) {
   const [deleteId, setDeleteId] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function handleStatusChange(id, status) {
     try {
@@ -25,12 +29,15 @@ export default function DonationRequestTable({
 
   async function handleDelete() {
     try {
+      setDeleting(true);
       await api.deleteDonationRequest(deleteId);
       toast.success("Request deleted");
       setDeleteId(null);
       onRefresh();
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -40,7 +47,7 @@ export default function DonationRequestTable({
 
   return (
     <>
-      <div className="overflow-x-auto rounded-lg bg-white shadow-sm ring-1 ring-[#f0d3cf]">
+      <div className="overflow-x-auto rounded-lg bg-white ring-1 ring-[#f0d3cf]">
         <table className="min-w-full text-left text-sm">
           <thead className="border-b border-[#f0d3cf] bg-[#fff3f0]">
             <tr>
@@ -64,7 +71,9 @@ export default function DonationRequestTable({
                 <td className="px-4 py-3">{request.donationDate}</td>
                 <td className="px-4 py-3">{request.donationTime}</td>
                 <td className="px-4 py-3">{request.bloodGroup}</td>
-                <td className="px-4 py-3 capitalize">{request.donationStatus}</td>
+                <td className="px-4 py-3">
+                  <DonationStatusBadge status={request.donationStatus} />
+                </td>
                 <td className="px-4 py-3">
                   {request.donationStatus === "inprogress" ? (
                     <div>
@@ -79,25 +88,31 @@ export default function DonationRequestTable({
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href={`/donation-requests/${request._id}`}
-                      className="rounded border border-[#b42318] px-2 py-1 text-xs font-semibold text-[#b42318]"
+                      title="View request"
+                      aria-label="View request"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded border border-[#b42318] text-[#b42318]"
                     >
-                      View
+                      <FaEye />
                     </Link>
 
                     {mode !== "volunteer" && (
                       <>
                         <Link
                           href={`/dashboard/donation-requests/${request._id}/edit`}
-                          className="rounded border border-[#49312d] px-2 py-1 text-xs font-semibold text-[#49312d]"
+                          title="Edit request"
+                          aria-label="Edit request"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded border border-[#49312d] text-[#49312d]"
                         >
-                          Edit
+                          <FaPen />
                         </Link>
                         <button
                           type="button"
                           onClick={() => setDeleteId(request._id)}
-                          className="rounded border border-red-500 px-2 py-1 text-xs font-semibold text-red-500"
+                          title="Delete request"
+                          aria-label="Delete request"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded border border-red-500 text-red-600"
                         >
-                          Delete
+                          <FaTrash />
                         </button>
                       </>
                     )}
@@ -108,18 +123,22 @@ export default function DonationRequestTable({
                           <button
                             type="button"
                             onClick={() => handleStatusChange(request._id, "done")}
-                            className="rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white"
+                            title="Mark as done"
+                            aria-label="Mark as done"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded bg-green-600 text-white"
                           >
-                            Done
+                            <FaCheck />
                           </button>
                           <button
                             type="button"
                             onClick={() =>
                               handleStatusChange(request._id, "canceled")
                             }
-                            className="rounded bg-gray-600 px-2 py-1 text-xs font-semibold text-white"
+                            title="Cancel request"
+                            aria-label="Cancel request"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded bg-gray-600 text-white"
                           >
-                            Cancel
+                            <FaXmark />
                           </button>
                         </>
                       )}
@@ -146,32 +165,15 @@ export default function DonationRequestTable({
         </table>
       </div>
 
-      {deleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
-          <div className="w-full max-w-md rounded-lg bg-white p-6">
-            <h3 className="text-lg font-bold text-[#241816]">Delete request?</h3>
-            <p className="mt-2 text-sm text-[#674842]">
-              This action can not be undone.
-            </p>
-            <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="rounded-md bg-red-600 px-4 py-2 font-semibold text-white"
-              >
-                Yes, delete
-              </button>
-              <button
-                type="button"
-                onClick={() => setDeleteId(null)}
-                className="rounded-md border border-[#e8c5bf] px-4 py-2 font-semibold"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        open={Boolean(deleteId)}
+        title="Delete request?"
+        message="This action cannot be undone."
+        confirmText="Delete"
+        loading={deleting}
+        onConfirm={handleDelete}
+        onClose={() => setDeleteId(null)}
+      />
     </>
   );
 }

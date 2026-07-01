@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import PrivateRouteClient from "@/app/components/auth/PrivateRouteClient";
+import DonateConfirmModal from "@/app/components/donation/DonateConfirmModal";
+import DonationStatusBadge from "@/app/components/donation/DonationStatusBadge";
 import { api } from "@/lib/api";
 import { useAuthUser } from "@/hooks/useAuthUser";
 
@@ -81,7 +83,10 @@ function DetailsContent() {
             <p><strong>Blood Group:</strong> {request.bloodGroup}</p>
             <p><strong>Date:</strong> {request.donationDate}</p>
             <p><strong>Time:</strong> {request.donationTime}</p>
-            <p><strong>Status:</strong> {request.donationStatus}</p>
+            <div className="flex items-center gap-2">
+              <strong>Status:</strong>
+              <DonationStatusBadge status={request.donationStatus} />
+            </div>
             <p><strong>Message:</strong> {request.requestMessage}</p>
             {request.donationStatus === "inprogress" && (
               <>
@@ -103,48 +108,13 @@ function DetailsContent() {
         </div>
       </section>
 
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
-          <div className="w-full max-w-md rounded-lg bg-white p-6">
-            <h3 className="text-lg font-bold text-[#241816]">Confirm Donation</h3>
-            <div className="mt-4 grid gap-3">
-              <div>
-                <label className="text-sm font-semibold">Donor Name</label>
-                <input
-                  value={user?.name || ""}
-                  disabled
-                  className="mt-1 w-full rounded-md border border-[#e8c5bf] px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-semibold">Donor Email</label>
-                <input
-                  value={user?.email || ""}
-                  disabled
-                  className="mt-1 w-full rounded-md border border-[#e8c5bf] px-3 py-2"
-                />
-              </div>
-            </div>
-            <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={handleDonate}
-                disabled={donating}
-                className="rounded-md bg-[#b42318] px-4 py-2 font-semibold text-white"
-              >
-                {donating ? "Confirming..." : "Confirm"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="rounded-md border border-[#e8c5bf] px-4 py-2 font-semibold"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DonateConfirmModal
+        open={showModal}
+        user={user}
+        loading={donating}
+        onConfirm={handleDonate}
+        onClose={() => setShowModal(false)}
+      />
     </main>
   );
 }

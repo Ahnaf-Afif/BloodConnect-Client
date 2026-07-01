@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaArrowRight, FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function DonationRequestCard({ request }) {
   return (
-    <article className="group relative h-full flex flex-col rounded-2xl bg-white p-6 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 ring-1 ring-[#f0d3cf]/50 overflow-hidden">
-      <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-bl from-[#b42318]/10 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-300"></div>
-
-      <div className="relative z-10 flex items-start justify-between gap-4">
+    <article className="flex h-full flex-col rounded-lg bg-white p-5 ring-1 ring-[#f0d3cf]">
+      <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
-          <h2 className="text-2xl font-bold text-[#241816] group-hover:text-[#b42318] transition-colors">
+          <h2 className="text-xl font-bold text-[#241816]">
             {request.recipientName}
           </h2>
           <p className="mt-2 flex items-center gap-2 text-base text-[#674842]">
@@ -17,8 +15,8 @@ export default function DonationRequestCard({ request }) {
           </p>
         </div>
 
-        <div className="rounded-xl bg-linear-to-br from-red-50 to-red-100/50 px-4 py-3 text-center ring-2 ring-[#b42318]/20">
-          <p className="text-3xl font-bold text-[#b42318]">
+        <div className="rounded-md bg-[#fff0ed] px-4 py-3 text-center">
+          <p className="text-2xl font-bold text-[#b42318]">
             {request.bloodGroup}
           </p>
           <p className="text-xs text-[#674842] font-semibold mt-1">
@@ -27,12 +25,12 @@ export default function DonationRequestCard({ request }) {
         </div>
       </div>
 
-      <div className="relative z-10 mt-6 grid gap-3 text-sm text-[#49312d]">
-        <div className="flex items-center gap-3 p-2 rounded-lg bg-blue-50/50">
+      <div className="mt-5 grid gap-3 text-sm text-[#49312d]">
+        <div className="flex items-center gap-3">
           <FaCalendarAlt className="text-[#b42318] text-base" />
           <span className="font-medium">{request.donationDate}</span>
         </div>
-        <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50/50">
+        <div className="flex items-center gap-3">
           <FaClock className="text-[#b42318] text-base" />
           <span className="font-medium">{request.donationTime}</span>
         </div>
@@ -40,9 +38,9 @@ export default function DonationRequestCard({ request }) {
 
       <Link
         href={`/donation-requests/${request._id}`}
-        className="mt-6 relative z-10 inline-flex justify-center rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-5 py-3 font-bold text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+        className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-[#b42318] px-5 py-3 font-semibold text-white hover:bg-[#8f1c14]"
       >
-        View Details →
+        View Details <FaArrowRight />
       </Link>
     </article>
   );
