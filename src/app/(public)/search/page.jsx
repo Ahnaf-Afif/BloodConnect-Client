@@ -23,6 +23,11 @@ export default function SearchPage() {
   async function handleSearch(event) {
     event.preventDefault();
 
+    if (!form.bloodGroup || !form.district || !form.upazila) {
+      toast.error("Choose a blood group, district and upazila");
+      return;
+    }
+
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -74,6 +79,7 @@ export default function SearchPage() {
                 <select
                   id="bloodGroup"
                   value={form.bloodGroup}
+                  required
                   onChange={(event) =>
                     setForm((current) => ({
                       ...current,
@@ -104,6 +110,7 @@ export default function SearchPage() {
                 onUpazilaChange={(value) =>
                   setForm((current) => ({ ...current, upazila: value }))
                 }
+                required
               />
             </div>
 
@@ -137,7 +144,7 @@ export default function SearchPage() {
                 {donors.map((donor) => (
                   <article
                     key={donor._id}
-                    className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-[#f0d3cf]"
+                    className="rounded-lg bg-white p-5 ring-1 ring-[#f0d3cf]"
                   >
                     <div className="flex items-center gap-3">
                       <span

@@ -1,31 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
 import EmptyState from "@/app/components/common/EmptyState";
+import FundingTable from "@/app/components/funding/FundingTable";
+import GiveFundButton from "@/app/components/funding/GiveFundButton";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import Navbar from "@/app/components/layout/Navbar";
 import { api } from "@/lib/api";
 
 export default function FundingContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [funds, setFunds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [amount, setAmount] = useState("");
-  const [paying, setPaying] = useState(false);
-
-  async function loadFunds() {
-    try {
-      const result = await api.getFunds();
-      setFunds(result.data);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const success = searchParams.get("success");
+  const sessionId = searchParams.get("session_id");
+  const canceled = searchParams.get("canceled");
 
   useEffect(() => {
     api
@@ -36,9 +29,6 @@ export default function FundingContent() {
   }, []);
 
   useEffect(() => {
-    const success = searchParams.get("success");
-    const sessionId = searchParams.get("session_id");
-
     if (success === "true" && sessionId) {
       api
         .confirmFund(sessionId)
@@ -47,26 +37,17 @@ export default function FundingContent() {
           return api.getFunds();
         })
         .then((result) => setFunds(result.data))
-        .catch((error) => toast.error(error.message));
+        .catch((error) => toast.error(error.message))
+        .finally(() => router.replace("/funding"));
     }
-  }, [searchParams]);
 
-  async function handleGiveFund(event) {
-    event.preventDefault();
-
-    try {
-      setPaying(true);
-      const result = await api.createFundCheckout(Number(amount));
-
-      if (result.data.url) {
-        window.location.href = result.data.url;
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setPaying(false);
+    if (canceled === "true") {
+      toast.info("Payment canceled");
+      router.replace("/funding");
     }
-  }
+  }, [success, sessionId, canceled, router]);
+
+  const totalFunding = funds.reduce((total, fund) => total + fund.amount, 0);
 
   return (
     <main className="min-h-screen bg-[#fff8f6]">
@@ -79,32 +60,15 @@ export default function FundingContent() {
             Support blood donation organizations with a small fund.
           </p>
 
-          <form
-            onSubmit={handleGiveFund}
-            className="mt-6 flex flex-wrap items-end gap-3 rounded-lg bg-white p-5 shadow-sm ring-1 ring-[#f0d3cf]"
-          >
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-y border-[#f0d3cf] py-5">
             <div>
-              <label className="text-sm font-semibold text-[#49312d]" htmlFor="amount">
-                Amount (USD)
-              </label>
-              <input
-                id="amount"
-                type="number"
-                min="1"
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                className="mt-1 block rounded-md border border-[#e8c5bf] px-3 py-2"
-                placeholder="10"
-              />
+              <p className="text-sm text-[#674842]">Total raised</p>
+              <p className="text-2xl font-bold text-[#241816]">
+                ${totalFunding.toFixed(2)}
+              </p>
             </div>
-            <button
-              type="submit"
-              disabled={paying}
-              className="rounded-md bg-[#b42318] px-5 py-3 font-semibold text-white"
-            >
-              {paying ? "Processing..." : "Give Fund"}
-            </button>
-          </form>
+            <GiveFundButton />
+          </div>
 
           <div className="mt-8">
             {loading ? (
@@ -112,28 +76,7 @@ export default function FundingContent() {
             ) : funds.length === 0 ? (
               <EmptyState title="No funds yet" text="Be the first to donate." />
             ) : (
-              <div className="overflow-x-auto rounded-lg bg-white shadow-sm ring-1 ring-[#f0d3cf]">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="border-b border-[#f0d3cf] bg-[#fff3f0]">
-                    <tr>
-                      <th className="px-4 py-3">Donor Name</th>
-                      <th className="px-4 py-3">Amount</th>
-                      <th className="px-4 py-3">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {funds.map((fund) => (
-                      <tr key={fund._id} className="border-b border-[#f0d3cf]">
-                        <td className="px-4 py-3">{fund.userName}</td>
-                        <td className="px-4 py-3">${fund.amount}</td>
-                        <td className="px-4 py-3">
-                          {new Date(fund.createdAt).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <FundingTable funds={funds} />
             )}
           </div>
         </div>
