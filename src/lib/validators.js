@@ -46,11 +46,15 @@ export const getValidationError = (field, value) => {
     case "email":
       return !validateEmail(value) ? "Invalid email address" : "";
     case "password":
-      return !validatePassword(value) ? "Password must be at least 6 characters" : "";
+      return !validatePassword(value)
+        ? "Password must be at least 6 characters"
+        : "";
     case "phone":
       return !validatePhoneNumber(value) ? "Invalid phone number" : "";
     case "name":
-      return !validateName(value) ? "Name must be at least 2 characters and contain only letters" : "";
+      return !validateName(value)
+        ? "Name must be at least 2 characters and contain only letters"
+        : "";
     case "bloodGroup":
       return !validateBloodGroup(value) ? "Invalid blood group" : "";
     case "date":

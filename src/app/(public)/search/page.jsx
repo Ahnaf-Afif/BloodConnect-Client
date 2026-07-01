@@ -65,14 +65,20 @@ export default function SearchPage() {
           >
             <div className="grid gap-4 md:grid-cols-2">
               <div className="grid gap-2">
-                <label className="text-sm font-semibold text-[#49312d]" htmlFor="bloodGroup">
+                <label
+                  className="text-sm font-semibold text-[#49312d]"
+                  htmlFor="bloodGroup"
+                >
                   Blood Group
                 </label>
                 <select
                   id="bloodGroup"
                   value={form.bloodGroup}
                   onChange={(event) =>
-                    setForm((current) => ({ ...current, bloodGroup: event.target.value }))
+                    setForm((current) => ({
+                      ...current,
+                      bloodGroup: event.target.value,
+                    }))
                   }
                   className="rounded-md border border-[#e8c5bf] px-3 py-2"
                 >
@@ -89,7 +95,11 @@ export default function SearchPage() {
                 district={form.district}
                 upazila={form.upazila}
                 onDistrictChange={(value) =>
-                  setForm((current) => ({ ...current, district: value, upazila: "" }))
+                  setForm((current) => ({
+                    ...current,
+                    district: value,
+                    upazila: "",
+                  }))
                 }
                 onUpazilaChange={(value) =>
                   setForm((current) => ({ ...current, upazila: value }))
@@ -139,7 +149,9 @@ export default function SearchPage() {
                         }
                       />
                       <div>
-                        <h2 className="font-bold text-[#241816]">{donor.name}</h2>
+                        <h2 className="font-bold text-[#241816]">
+                          {donor.name}
+                        </h2>
                         <p className="text-sm text-[#674842]">{donor.email}</p>
                       </div>
                     </div>

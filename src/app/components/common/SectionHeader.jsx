@@ -9,13 +9,11 @@ export default function SectionHeader({ title, subtitle, badge }) {
           <p className="text-sm font-semibold text-[#b42318]">{badge.text}</p>
         </div>
       )}
-      <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#241816] via-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#241816] via-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-3 text-lg text-[#674842] max-w-2xl">
-          {subtitle}
-        </p>
+        <p className="mt-3 text-lg text-[#674842] max-w-2xl">{subtitle}</p>
       )}
     </div>
   );

@@ -11,20 +11,23 @@ export const useForm = (initialValues, onSubmit) => {
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = useCallback((e) => {
-    const { name, value, type, checked } = e.target;
-    setValues((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value, type, checked } = e.target;
+      setValues((prev) => ({
         ...prev,
-        [name]: "",
+        [name]: type === "checkbox" ? checked : value,
       }));
-    }
-  }, [errors]);
+      // Clear error when user starts typing
+      if (errors[name]) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      }
+    },
+    [errors],
+  );
 
   const handleBlur = useCallback((e) => {
     const { name } = e.target;
@@ -48,7 +51,7 @@ export const useForm = (initialValues, onSubmit) => {
         setIsSubmitting(false);
       }
     },
-    [values, onSubmit]
+    [values, onSubmit],
   );
 
   const reset = useCallback(() => {

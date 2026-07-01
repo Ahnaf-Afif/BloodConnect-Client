@@ -18,6 +18,9 @@ export default function DashboardSidebar() {
     if (link.adminOnly && user?.role !== "admin") return false;
     if (link.volunteerOrAdmin && user?.role === "donor") return false;
     if (link.donorOnly && user?.role !== "donor") return false;
+    if (link.allowedRoles && !link.allowedRoles.includes(user?.role)) {
+      return false;
+    }
     return true;
   });
 
@@ -32,8 +35,8 @@ export default function DashboardSidebar() {
   }
 
   return (
-    <aside className="border-b border-[#f0d3cf] bg-gradient-to-b from-white to-[#fff8f6] px-5 py-5 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
-      <div className="rounded-2xl bg-gradient-to-r from-[#b42318] to-[#8a1810] p-4 text-white shadow-lg">
+    <aside className="border-b border-[#f0d3cf] bg-linear-to-b from-white to-[#fff8f6] px-5 py-5 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
+      <div className="rounded-2xl bg-linear-to-r from-[#b42318] to-[#8a1810] p-4 text-white shadow-lg">
         <Link href="/" className="text-2xl font-bold">
           🩸 BloodConnect
         </Link>
@@ -43,7 +46,9 @@ export default function DashboardSidebar() {
           </div>
           <div>
             <p className="text-sm font-semibold">{user?.name || "Welcome"}</p>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/80">{user?.role || "Member"}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-white/80">
+              {user?.role || "Member"}
+            </p>
           </div>
         </div>
       </div>

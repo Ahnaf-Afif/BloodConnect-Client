@@ -48,7 +48,9 @@ export default function DonationRequestForm() {
       ["requestMessage", "Request message"],
     ];
 
-    const missingField = requiredFields.find(([field]) => !String(formData[field]).trim());
+    const missingField = requiredFields.find(
+      ([field]) => !String(formData[field]).trim(),
+    );
 
     if (missingField) {
       toast.error(`${missingField[1]} is required`);
@@ -119,7 +121,10 @@ export default function DonationRequestForm() {
         />
 
         <div className="grid gap-2">
-          <label className="text-sm font-semibold text-[#49312d]" htmlFor="bloodGroup">
+          <label
+            className="text-sm font-semibold text-[#49312d]"
+            htmlFor="bloodGroup"
+          >
             Blood Group
           </label>
           <select
@@ -155,7 +160,10 @@ export default function DonationRequestForm() {
       </div>
 
       <div className="mt-4 grid gap-2">
-        <label className="text-sm font-semibold text-[#49312d]" htmlFor="requestMessage">
+        <label
+          className="text-sm font-semibold text-[#49312d]"
+          htmlFor="requestMessage"
+        >
           Request Message
         </label>
         <textarea
@@ -172,7 +180,7 @@ export default function DonationRequestForm() {
       <button
         type="submit"
         disabled={saving}
-        className="mt-8 rounded-lg bg-gradient-to-r from-[#b42318] to-[#8a1810] px-8 py-4 font-bold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:bg-[#d99b94] disabled:cursor-not-allowed"
+        className="mt-8 rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-8 py-4 font-bold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:bg-[#d99b94] disabled:cursor-not-allowed"
       >
         {saving ? "Creating..." : "Request Blood"}
       </button>
@@ -180,10 +188,21 @@ export default function DonationRequestForm() {
   );
 }
 
-function FormInput({ label, name, value, onChange, disabled, placeholder, type = "text" }) {
+function FormInput({
+  label,
+  name,
+  value,
+  onChange,
+  disabled,
+  placeholder,
+  type = "text",
+}) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-bold text-[#49312d] uppercase tracking-wide" htmlFor={name}>
+      <label
+        className="text-sm font-bold text-[#49312d] uppercase tracking-wide"
+        htmlFor={name}
+      >
         {label}
       </label>
       <input

@@ -1,10 +1,11 @@
 function buildPlaceholderAvatar(label = "Avatar") {
-  const initials = (label || "Avatar")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0].toUpperCase())
-    .join("") || "A";
+  const initials =
+    (label || "Avatar")
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join("") || "A";
 
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160">
@@ -28,10 +29,13 @@ export async function uploadImageToImgBB(imageFile) {
     const formData = new FormData();
     formData.append("image", imageFile);
 
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
     const data = await response.json();
 

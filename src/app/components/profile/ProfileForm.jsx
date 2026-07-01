@@ -196,7 +196,11 @@ export default function ProfileForm() {
           upazila={profile.upazila}
           disabled={!editable}
           onDistrictChange={(value) =>
-            setProfile((current) => ({ ...current, district: value, upazila: "" }))
+            setProfile((current) => ({
+              ...current,
+              district: value,
+              upazila: "",
+            }))
           }
           onUpazilaChange={(value) =>
             setProfile((current) => ({ ...current, upazila: value }))

@@ -75,7 +75,9 @@ export default function EditDonationRequestPage() {
       ["requestMessage", "Request message"],
     ];
 
-    const missingField = requiredFields.find(([field]) => !String(formData[field]).trim());
+    const missingField = requiredFields.find(
+      ([field]) => !String(formData[field]).trim(),
+    );
 
     if (missingField) {
       toast.error(`${missingField[1]} is required`);
@@ -100,7 +102,9 @@ export default function EditDonationRequestPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-10">
-      <h1 className="text-3xl font-bold text-[#241816]">Edit Donation Request</h1>
+      <h1 className="text-3xl font-bold text-[#241816]">
+        Edit Donation Request
+      </h1>
 
       <form
         onSubmit={handleSubmit}
@@ -125,7 +129,10 @@ export default function EditDonationRequestPage() {
               }))
             }
             onUpazilaChange={(value) =>
-              setFormData((current) => ({ ...current, recipientUpazila: value }))
+              setFormData((current) => ({
+                ...current,
+                recipientUpazila: value,
+              }))
             }
           />
 
@@ -143,7 +150,10 @@ export default function EditDonationRequestPage() {
           />
 
           <div className="grid gap-2">
-            <label className="text-sm font-semibold text-[#49312d]" htmlFor="bloodGroup">
+            <label
+              className="text-sm font-semibold text-[#49312d]"
+              htmlFor="bloodGroup"
+            >
               Blood Group
             </label>
             <select
@@ -179,7 +189,10 @@ export default function EditDonationRequestPage() {
         </div>
 
         <div className="mt-4 grid gap-2">
-          <label className="text-sm font-semibold text-[#49312d]" htmlFor="requestMessage">
+          <label
+            className="text-sm font-semibold text-[#49312d]"
+            htmlFor="requestMessage"
+          >
             Request Message
           </label>
           <textarea

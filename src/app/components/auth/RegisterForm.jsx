@@ -86,17 +86,21 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 grid gap-5">
-      <div className="rounded-2xl bg-gradient-to-r from-[#fff5f3] to-[#fff8f6] p-4 ring-1 ring-[#f0d3cf]">
+      <div className="rounded-2xl bg-linear-to-r from-[#fff5f3] to-[#fff8f6] p-4 ring-1 ring-[#f0d3cf]">
         <p className="flex items-center gap-2 text-sm font-semibold text-[#b42318]">
           <FaDroplet /> Join the community
         </p>
         <p className="mt-1 text-sm text-[#674842]">
-          Create an account to share help, request support, and connect with nearby donors.
+          Create an account to share help, request support, and connect with
+          nearby donors.
         </p>
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="name">
+        <label
+          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          htmlFor="name"
+        >
           Name
         </label>
         <input
@@ -110,7 +114,10 @@ export default function RegisterForm() {
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="email">
+        <label
+          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          htmlFor="email"
+        >
           Email
         </label>
         <input
@@ -125,7 +132,10 @@ export default function RegisterForm() {
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="avatar">
+        <label
+          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          htmlFor="avatar"
+        >
           Avatar
         </label>
         <input
@@ -139,7 +149,10 @@ export default function RegisterForm() {
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="grid gap-2">
-          <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="bloodGroup">
+          <label
+            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            htmlFor="bloodGroup"
+          >
             Blood Group
           </label>
           <select
@@ -162,7 +175,11 @@ export default function RegisterForm() {
           district={formData.district}
           upazila={formData.upazila}
           onDistrictChange={(value) =>
-            setFormData((current) => ({ ...current, district: value, upazila: "" }))
+            setFormData((current) => ({
+              ...current,
+              district: value,
+              upazila: "",
+            }))
           }
           onUpazilaChange={(value) =>
             setFormData((current) => ({ ...current, upazila: value }))
@@ -172,7 +189,10 @@ export default function RegisterForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="password">
+          <label
+            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -187,7 +207,10 @@ export default function RegisterForm() {
         </div>
 
         <div className="grid gap-2">
-          <label className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]" htmlFor="confirmPassword">
+          <label
+            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            htmlFor="confirmPassword"
+          >
             Confirm Password
           </label>
           <input
@@ -205,7 +228,7 @@ export default function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#b42318] to-[#8a1810] px-5 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#b42318] to-[#8a1810] px-5 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading ? "Creating account..." : "Create account"}
         <FaArrowRight />
@@ -213,7 +236,10 @@ export default function RegisterForm() {
 
       <p className="text-center text-sm text-[#674842]">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-[#b42318] transition hover:text-[#8a1810]">
+        <Link
+          href="/login"
+          className="font-semibold text-[#b42318] transition hover:text-[#8a1810]"
+        >
           Login
         </Link>
       </p>

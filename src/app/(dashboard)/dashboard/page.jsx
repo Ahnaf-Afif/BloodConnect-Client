@@ -16,7 +16,8 @@ export default function DashboardPage() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const isAdminOrVolunteer = user?.role === "admin" || user?.role === "volunteer";
+  const isAdminOrVolunteer =
+    user?.role === "admin" || user?.role === "volunteer";
 
   useEffect(() => {
     async function loadData() {
@@ -49,9 +50,12 @@ export default function DashboardPage() {
   return (
     <main className="mx-auto max-w-6xl px-5 py-10">
       <div className="mb-8">
-        <p className="text-sm font-bold uppercase tracking-widest text-[#b42318] mb-2">👋 Welcome Back</p>
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#241816] via-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
-          Dashboard, {user?.name}</h1>
+        <p className="text-sm font-bold uppercase tracking-widest text-[#b42318] mb-2">
+          👋 Welcome Back
+        </p>
+        <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#241816] via-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
+          Dashboard, {user?.name}
+        </h1>
       </div>
 
       {isAdminOrVolunteer && stats && (
@@ -104,13 +108,20 @@ export default function DashboardPage() {
                   max: Math.max(stats.totalFunding, 100),
                 },
               ].map((item) => {
-                const percent = Math.min(100, Math.round((item.value / item.max) * 100));
+                const percent = Math.min(
+                  100,
+                  Math.round((item.value / item.max) * 100),
+                );
 
                 return (
                   <div key={item.label} className="rounded-md bg-[#fff8f6] p-4">
                     <div className="flex items-center justify-between text-sm font-semibold text-[#49312d]">
                       <span>{item.label}</span>
-                      <span>{item.label === "Funding" ? `$${item.value}` : item.value}</span>
+                      <span>
+                        {item.label === "Funding"
+                          ? `$${item.value}`
+                          : item.value}
+                      </span>
                     </div>
                     <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#f0d3cf]">
                       <div
@@ -118,7 +129,9 @@ export default function DashboardPage() {
                         style={{ width: `${percent}%` }}
                       />
                     </div>
-                    <p className="mt-2 text-xs text-[#674842]">{percent}% of target</p>
+                    <p className="mt-2 text-xs text-[#674842]">
+                      {percent}% of target
+                    </p>
                   </div>
                 );
               })}
@@ -155,10 +168,14 @@ export default function DashboardPage() {
 function StatCard({ icon: Icon, title, count }) {
   return (
     <section className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-[#f0d3cf]/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#b42318]/10 rounded-full -mr-10 -mt-10"></div>
+      <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-bl from-[#b42318]/10 rounded-full -mr-10 -mt-10"></div>
       <Icon className="text-3xl text-[#b42318] relative z-10" />
-      <p className="mt-4 text-4xl font-bold text-[#241816] relative z-10">{count}</p>
-      <p className="mt-2 text-sm text-[#674842] font-semibold relative z-10">{title}</p>
+      <p className="mt-4 text-4xl font-bold text-[#241816] relative z-10">
+        {count}
+      </p>
+      <p className="mt-2 text-sm text-[#674842] font-semibold relative z-10">
+        {title}
+      </p>
     </section>
   );
 }

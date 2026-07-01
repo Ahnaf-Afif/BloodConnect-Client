@@ -38,7 +38,9 @@ export default function StatusBadge({ status, variant = "default" }) {
   };
 
   return (
-    <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor()}`}>
+    <span
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor()}`}
+    >
       <span className="text-base">{getStatusIcon()}</span>
       {status?.charAt(0).toUpperCase() + status?.slice(1)}
     </span>

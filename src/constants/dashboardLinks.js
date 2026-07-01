@@ -22,7 +22,7 @@ export const dashboardLinks = [
     label: "Create Request",
     href: "/dashboard/create-donation-request",
     icon: FaPlusCircle,
-    donorOnly: true,
+    allowedRoles: ["donor", "volunteer", "admin"],
   },
   {
     label: "My Requests",
