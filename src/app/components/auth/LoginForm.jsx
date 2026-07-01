@@ -51,6 +51,7 @@ export default function LoginForm() {
         <input
           id="email"
           type="email"
+          required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
@@ -68,6 +69,7 @@ export default function LoginForm() {
         <input
           id="password"
           type="password"
+          required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"

@@ -51,6 +51,11 @@ export default function RegisterForm() {
       return;
     }
 
+    if (!avatarFile.type.startsWith("image/") || avatarFile.size > 2 * 1024 * 1024) {
+      toast.error("Avatar must be an image under 2 MB");
+      return;
+    }
+
     if (!formData.bloodGroup || !formData.district || !formData.upazila) {
       toast.error("Please complete your blood group and location details");
       return;
@@ -66,8 +71,8 @@ export default function RegisterForm() {
       const avatarUrl = await uploadImageToImgBB(avatarFile);
 
       await api.register({
-        name: formData.name,
-        email: formData.email,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
         avatar: avatarUrl,
         bloodGroup: formData.bloodGroup,
         district: formData.district,
@@ -108,6 +113,8 @@ export default function RegisterForm() {
           name="name"
           value={formData.name}
           onChange={handleChange}
+          required
+          maxLength={80}
           className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
           placeholder="Your full name"
         />
@@ -126,6 +133,7 @@ export default function RegisterForm() {
           type="email"
           value={formData.email}
           onChange={handleChange}
+          required
           className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
           placeholder="you@example.com"
         />
@@ -142,6 +150,7 @@ export default function RegisterForm() {
           id="avatar"
           type="file"
           accept="image/*"
+          required
           onChange={(event) => setAvatarFile(event.target.files[0])}
           className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318]"
         />
@@ -160,6 +169,7 @@ export default function RegisterForm() {
             name="bloodGroup"
             value={formData.bloodGroup}
             onChange={handleChange}
+            required
             className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
           >
             <option value="">Select</option>
@@ -184,6 +194,7 @@ export default function RegisterForm() {
           onUpazilaChange={(value) =>
             setFormData((current) => ({ ...current, upazila: value }))
           }
+          required
         />
       </div>
 
@@ -199,6 +210,8 @@ export default function RegisterForm() {
             id="password"
             name="password"
             type="password"
+            minLength={6}
+            required
             value={formData.password}
             onChange={handleChange}
             className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
@@ -217,6 +230,8 @@ export default function RegisterForm() {
             id="confirmPassword"
             name="confirmPassword"
             type="password"
+            minLength={6}
+            required
             value={formData.confirmPassword}
             onChange={handleChange}
             className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"

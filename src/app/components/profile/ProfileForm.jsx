@@ -21,6 +21,7 @@ const emptyProfile = {
 
 export default function ProfileForm() {
   const [profile, setProfile] = useState(emptyProfile);
+  const [savedProfile, setSavedProfile] = useState(emptyProfile);
   const [avatarFile, setAvatarFile] = useState(null);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -30,14 +31,9 @@ export default function ProfileForm() {
     async function loadProfile() {
       try {
         const result = await api.getProfile();
-        setProfile({
-          name: result.data.name || "",
-          email: result.data.email || "",
-          avatar: result.data.avatar || "",
-          bloodGroup: result.data.bloodGroup || "",
-          district: result.data.district || "",
-          upazila: result.data.upazila || "",
-        });
+        const nextProfile = makeProfile(result.data);
+        setProfile(nextProfile);
+        setSavedProfile(nextProfile);
       } catch (error) {
         toast.error(error.message);
       } finally {
@@ -66,6 +62,15 @@ export default function ProfileForm() {
       return;
     }
 
+    if (
+      avatarFile &&
+      (!avatarFile.type.startsWith("image/") ||
+        avatarFile.size > 2 * 1024 * 1024)
+    ) {
+      toast.error("Avatar must be an image under 2 MB");
+      return;
+    }
+
     try {
       setSaving(true);
       let avatarUrl = profile.avatar;
@@ -81,14 +86,10 @@ export default function ProfileForm() {
         upazila: profile.upazila,
       });
 
-      setProfile({
-        name: result.data.name || "",
-        email: result.data.email || "",
-        avatar: result.data.avatar || "",
-        bloodGroup: result.data.bloodGroup || "",
-        district: result.data.district || "",
-        upazila: result.data.upazila || "",
-      });
+      const nextProfile = makeProfile(result.data);
+      setProfile(nextProfile);
+      setSavedProfile(nextProfile);
+      setAvatarFile(null);
       setEditable(false);
       toast.success("Profile updated");
     } catch (error) {
@@ -159,6 +160,7 @@ export default function ProfileForm() {
           </label>
           <input
             id="avatar"
+            key={editable ? "editable-avatar" : "locked-avatar"}
             type="file"
             accept="image/*"
             onChange={(event) => setAvatarFile(event.target.files[0])}
@@ -179,6 +181,7 @@ export default function ProfileForm() {
             name="bloodGroup"
             value={profile.bloodGroup}
             disabled={!editable}
+            required
             onChange={handleChange}
             className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842]"
           >
@@ -205,6 +208,7 @@ export default function ProfileForm() {
           onUpazilaChange={(value) =>
             setProfile((current) => ({ ...current, upazila: value }))
           }
+          required
         />
       </div>
 
@@ -219,7 +223,11 @@ export default function ProfileForm() {
           </button>
           <button
             type="button"
-            onClick={() => setEditable(false)}
+            onClick={() => {
+              setProfile(savedProfile);
+              setAvatarFile(null);
+              setEditable(false);
+            }}
             className="rounded-md border border-[#e8c5bf] px-5 py-3 font-semibold text-[#49312d]"
           >
             Cancel
@@ -241,9 +249,21 @@ function ProfileInput({ label, name, value, disabled, onChange }) {
         name={name}
         value={value}
         disabled={disabled}
+        required={!disabled}
         onChange={onChange}
         className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842]"
       />
     </div>
   );
+}
+
+function makeProfile(data) {
+  return {
+    name: data.name || "",
+    email: data.email || "",
+    avatar: data.avatar || "",
+    bloodGroup: data.bloodGroup || "",
+    district: data.district || "",
+    upazila: data.upazila || "",
+  };
 }

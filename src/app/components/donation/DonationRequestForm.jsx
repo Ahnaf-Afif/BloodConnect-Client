@@ -22,11 +22,18 @@ const emptyForm = {
   requestMessage: "",
 };
 
-export default function DonationRequestForm() {
+export default function DonationRequestForm({
+  initialData = emptyForm,
+  requestId = "",
+}) {
   const router = useRouter();
   const { user, loading: userLoading } = useAuthUser();
-  const [formData, setFormData] = useState(emptyForm);
+  const [formData, setFormData] = useState({
+    ...emptyForm,
+    ...initialData,
+  });
   const [saving, setSaving] = useState(false);
+  const isEditing = Boolean(requestId);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -59,8 +66,15 @@ export default function DonationRequestForm() {
 
     try {
       setSaving(true);
-      await api.createDonationRequest(formData);
-      toast.success("Donation request created");
+
+      if (isEditing) {
+        await api.updateDonationRequest(requestId, formData);
+        toast.success("Donation request updated");
+      } else {
+        await api.createDonationRequest(formData);
+        toast.success("Donation request created");
+      }
+
       router.push("/dashboard/my-donation-requests");
     } catch (error) {
       toast.error(error.message);
@@ -76,11 +90,19 @@ export default function DonationRequestForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 rounded-2xl bg-white p-8 shadow-lg ring-1 ring-[#f0d3cf]/50"
+      className="mt-8 rounded-lg bg-white p-6 ring-1 ring-[#f0d3cf]"
     >
       <div className="grid gap-4 md:grid-cols-2">
-        <FormInput label="Requester Name" value={user?.name || ""} disabled />
-        <FormInput label="Requester Email" value={user?.email || ""} disabled />
+        {!isEditing && (
+          <>
+            <FormInput label="Requester Name" value={user?.name || ""} disabled />
+            <FormInput
+              label="Requester Email"
+              value={user?.email || ""}
+              disabled
+            />
+          </>
+        )}
 
         <FormInput
           label="Recipient Name"
@@ -88,6 +110,8 @@ export default function DonationRequestForm() {
           value={formData.recipientName}
           onChange={handleChange}
           placeholder="Patient name"
+          maxLength={120}
+          required
         />
 
         <DistrictSelect
@@ -103,6 +127,7 @@ export default function DonationRequestForm() {
           onUpazilaChange={(value) =>
             setFormData((current) => ({ ...current, recipientUpazila: value }))
           }
+          required
         />
 
         <FormInput
@@ -111,6 +136,8 @@ export default function DonationRequestForm() {
           value={formData.hospitalName}
           onChange={handleChange}
           placeholder="Dhaka Medical College Hospital"
+          maxLength={120}
+          required
         />
         <FormInput
           label="Full Address"
@@ -118,6 +145,8 @@ export default function DonationRequestForm() {
           value={formData.fullAddress}
           onChange={handleChange}
           placeholder="Zahir Raihan Road, Dhaka"
+          maxLength={1000}
+          required
         />
 
         <div className="grid gap-2">
@@ -132,6 +161,7 @@ export default function DonationRequestForm() {
             name="bloodGroup"
             value={formData.bloodGroup}
             onChange={handleChange}
+            required
             className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none focus:border-[#b42318]"
           >
             <option value="">Select</option>
@@ -149,6 +179,7 @@ export default function DonationRequestForm() {
           type="date"
           value={formData.donationDate}
           onChange={handleChange}
+          required
         />
         <FormInput
           label="Donation Time"
@@ -156,6 +187,7 @@ export default function DonationRequestForm() {
           type="time"
           value={formData.donationTime}
           onChange={handleChange}
+          required
         />
       </div>
 
@@ -172,6 +204,8 @@ export default function DonationRequestForm() {
           value={formData.requestMessage}
           onChange={handleChange}
           rows={5}
+          required
+          maxLength={1000}
           className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none focus:border-[#b42318]"
           placeholder="Write why blood is needed"
         />
@@ -180,9 +214,15 @@ export default function DonationRequestForm() {
       <button
         type="submit"
         disabled={saving}
-        className="mt-8 rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-8 py-4 font-bold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:bg-[#d99b94] disabled:cursor-not-allowed"
+        className="mt-6 rounded-md bg-[#b42318] px-6 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {saving ? "Creating..." : "Request Blood"}
+        {saving
+          ? isEditing
+            ? "Updating..."
+            : "Creating..."
+          : isEditing
+            ? "Update Donation Request"
+            : "Request Blood"}
       </button>
     </form>
   );
@@ -196,11 +236,13 @@ function FormInput({
   disabled,
   placeholder,
   type = "text",
+  required = false,
+  maxLength,
 }) {
   return (
     <div className="grid gap-2">
       <label
-        className="text-sm font-bold text-[#49312d] uppercase tracking-wide"
+        className="text-sm font-semibold text-[#49312d]"
         htmlFor={name}
       >
         {label}
@@ -213,7 +255,9 @@ function FormInput({
         disabled={disabled}
         onChange={onChange}
         placeholder={placeholder}
-        className="rounded-lg border-2 border-[#e8c5bf] px-4 py-3 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842] focus:border-[#b42318] focus:ring-2 focus:ring-[#b42318]/20 transition-all"
+        required={required}
+        maxLength={maxLength}
+        className="rounded-md border border-[#e8c5bf] px-3 py-2 outline-none disabled:bg-[#fff8f6] disabled:text-[#674842] focus:border-[#b42318]"
       />
     </div>
   );
