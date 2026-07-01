@@ -1,5 +1,22 @@
 "use client";
 
+import {
+  FaBan,
+  FaCircleCheck,
+  FaCircleExclamation,
+  FaClock,
+  FaGear,
+} from "react-icons/fa6";
+
+const statusIcons = {
+  active: FaCircleCheck,
+  done: FaCircleCheck,
+  inactive: FaBan,
+  canceled: FaBan,
+  pending: FaClock,
+  inprogress: FaGear,
+};
+
 export default function StatusBadge({ status, variant = "default" }) {
   const getStatusColor = () => {
     switch (status) {
@@ -18,30 +35,13 @@ export default function StatusBadge({ status, variant = "default" }) {
     }
   };
 
-  const getStatusIcon = () => {
-    switch (status) {
-      case "active":
-        return "🟢";
-      case "inactive":
-        return "🔴";
-      case "pending":
-        return "⏳";
-      case "inprogress":
-        return "⚙️";
-      case "done":
-        return "✅";
-      case "canceled":
-        return "❌";
-      default:
-        return "○";
-    }
-  };
+  const StatusIcon = statusIcons[status] || FaCircleExclamation;
 
   return (
     <span
       className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor()}`}
     >
-      <span className="text-base">{getStatusIcon()}</span>
+      <StatusIcon />
       {status?.charAt(0).toUpperCase() + status?.slice(1)}
     </span>
   );

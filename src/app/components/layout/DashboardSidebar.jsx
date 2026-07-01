@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FaRightFromBracket, FaUsers } from "react-icons/fa6";
+import { FaDroplet, FaRightFromBracket, FaUsers } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 import { dashboardLinks } from "@/constants/dashboardLinks";
@@ -35,10 +35,11 @@ export default function DashboardSidebar() {
   }
 
   return (
-    <aside className="border-b border-[#f0d3cf] bg-linear-to-b from-white to-[#fff8f6] px-5 py-5 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
-      <div className="rounded-2xl bg-linear-to-r from-[#b42318] to-[#8a1810] p-4 text-white shadow-lg">
-        <Link href="/" className="text-2xl font-bold">
-          🩸 BloodConnect
+    <aside className="border-b border-[#f0d3cf] bg-white px-5 py-5 lg:min-h-screen lg:w-72 lg:border-b-0 lg:border-r">
+      <div className="rounded-lg bg-[#b42318] p-4 text-white shadow-md">
+        <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
+          <FaDroplet />
+          BloodConnect
         </Link>
         <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/15 p-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">

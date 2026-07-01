@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { FaDroplet, FaGauge, FaRightFromBracket } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 import { api } from "@/lib/api";
@@ -52,9 +53,10 @@ export default function Navbar() {
     <nav className="flex items-center justify-between py-2 px-1">
       <Link
         href="/"
-        className="text-2xl font-bold bg-linear-to-r from-[#b42318] to-[#8a1810] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+        className="flex items-center gap-2 text-2xl font-bold text-[#b42318] transition-opacity hover:opacity-80"
       >
-        🩸 BloodConnect
+        <FaDroplet />
+        BloodConnect
       </Link>
 
       <div className="flex items-center gap-6 text-sm font-semibold text-[#49312d]">
@@ -80,7 +82,7 @@ export default function Navbar() {
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <span
-                  className="size-10 rounded-full bg-linear-to-br from-[#b42318] to-[#8a1810] bg-cover bg-center ring-2 ring-[#f0d3cf] shadow-md hover:ring-[#b42318] transition-all"
+                  className="size-10 rounded-full bg-[#b42318] bg-cover bg-center ring-2 ring-[#f0d3cf] shadow-sm transition hover:ring-[#b42318]"
                   style={
                     user.avatar
                       ? { backgroundImage: `url(${user.avatar})` }
@@ -93,18 +95,20 @@ export default function Navbar() {
                 <div className="absolute right-0 z-20 mt-2 w-48 rounded-xl bg-white py-2 shadow-xl ring-2 ring-[#f0d3cf] overflow-hidden">
                   <Link
                     href="/dashboard"
-                    className="block px-4 py-3 hover:bg-linear-to-r hover:from-[#b42318]/10 hover:to-transparent transition-all font-medium text-[#241816]"
+                    className="flex items-center gap-2 px-4 py-3 font-medium text-[#241816] transition hover:bg-red-50"
                     onClick={() => setOpen(false)}
                   >
-                    📊 Dashboard
+                    <FaGauge />
+                    Dashboard
                   </Link>
                   <div className="border-t border-[#f0d3cf]"></div>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="block w-full px-4 py-3 text-left hover:bg-red-50 transition-colors font-medium text-[#241816]"
+                    className="flex w-full items-center gap-2 px-4 py-3 text-left font-medium text-[#241816] transition-colors hover:bg-red-50"
                   >
-                    🚪 Logout
+                    <FaRightFromBracket />
+                    Logout
                   </button>
                 </div>
               )}
@@ -113,7 +117,7 @@ export default function Navbar() {
         ) : (
           <Link
             href="/login"
-            className="rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-5 py-2 text-white font-semibold hover:shadow-lg transition-all duration-300"
+            className="rounded-lg bg-[#b42318] px-5 py-2 font-semibold text-white transition hover:bg-[#8a1810]"
           >
             Login
           </Link>

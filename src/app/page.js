@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { FaHandHoldingHeart, FaSearchLocation } from "react-icons/fa";
+import {
+  FaBolt,
+  FaClipboardList,
+  FaDroplet,
+  FaHandHoldingHeart,
+  FaLocationDot,
+  FaMagnifyingGlassLocation,
+} from "react-icons/fa6";
 
 import ContactSection from "@/app/components/home/ContactSection";
 import Navbar from "@/app/components/layout/Navbar";
@@ -7,37 +14,37 @@ import Navbar from "@/app/components/layout/Navbar";
 export default function Home() {
   const features = [
     {
-      title: "🔍 Quick Matching",
+      title: "Quick Matching",
       text: "Search donors by blood group, district and upazila in seconds.",
-      color: "from-blue-50",
+      icon: FaMagnifyingGlassLocation,
     },
     {
-      title: "📋 Request Tracking",
+      title: "Request Tracking",
       text: "Create and manage blood requests from your intuitive dashboard.",
-      color: "from-green-50",
+      icon: FaClipboardList,
     },
     {
-      title: "❤️ Community Support",
+      title: "Community Support",
       text: "Donate funds to help blood donation organizations thrive.",
-      color: "from-purple-50",
+      icon: FaHandHoldingHeart,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-[#fff8f6] via-white to-[#f5f5f5]">
+    <main className="min-h-screen bg-[#fffaf8]">
       <section className="mx-auto max-w-7xl px-5 py-6">
         <Navbar />
 
         <div className="grid items-center gap-16 py-16 lg:grid-cols-2">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 mb-6">
-              <span className="text-2xl">🩸</span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2">
+              <FaDroplet className="text-[#b42318]" />
               <p className="text-sm font-semibold text-[#b42318]">
                 Save Lives Today
               </p>
             </div>
 
-            <h1 className="max-w-3xl text-5xl md:text-7xl font-black leading-tight bg-linear-to-r from-[#241816] via-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
+            <h1 className="max-w-3xl text-5xl font-black leading-tight text-[#241816] md:text-7xl">
               Find donors faster when every minute matters.
             </h1>
 
@@ -50,7 +57,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center gap-3 rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-8 py-4 font-bold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-3 rounded-lg bg-[#b42318] px-8 py-4 font-bold text-white shadow-md transition hover:bg-[#8a1810]"
               >
                 <FaHandHoldingHeart className="text-xl" />
                 Join as a donor
@@ -58,9 +65,9 @@ export default function Home() {
 
               <Link
                 href="/search"
-                className="inline-flex items-center justify-center gap-3 rounded-lg border-2 border-[#b42318] bg-white px-8 py-4 font-bold text-[#b42318] shadow-md hover:bg-red-50 hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-3 rounded-lg border-2 border-[#b42318] bg-white px-8 py-4 font-bold text-[#b42318] transition hover:bg-red-50"
               >
-                <FaSearchLocation className="text-xl" />
+                <FaMagnifyingGlassLocation className="text-xl" />
                 Search donors
               </Link>
             </div>
@@ -81,19 +88,18 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative hidden lg:block">
-            <div className="absolute inset-0 bg-linear-to-r from-[#b42318]/10 to-[#8a1810]/10 rounded-3xl blur-3xl"></div>
-            <div className="relative rounded-3xl bg-linear-to-br from-white to-[#fff8f6] p-8 shadow-2xl ring-1 ring-white/50">
+          <div className="hidden lg:block">
+            <div className="rounded-lg border border-[#ecd7d2] bg-white p-8 shadow-lg">
               <div className="space-y-6">
-                <div className="flex items-center gap-4 rounded-xl bg-linear-to-r from-[#b42318]/5 to-transparent p-4">
-                  <div className="text-3xl">🩸</div>
+                <div className="flex items-center gap-4 rounded-lg bg-red-50 p-4">
+                  <FaDroplet className="text-2xl text-[#b42318]" />
                   <div>
                     <p className="font-bold text-[#241816]">Blood Type</p>
-                    <p className="text-sm text-[#674842]">A+ • B+ • AB+ • O+</p>
+                    <p className="text-sm text-[#674842]">A+, B+, AB+, O+</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 rounded-xl bg-linear-to-r from-blue-50/50 to-transparent p-4">
-                  <div className="text-3xl">📍</div>
+                <div className="flex items-center gap-4 rounded-lg bg-blue-50 p-4">
+                  <FaLocationDot className="text-2xl text-blue-700" />
                   <div>
                     <p className="font-bold text-[#241816]">Location Based</p>
                     <p className="text-sm text-[#674842]">
@@ -101,8 +107,8 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 rounded-xl bg-linear-to-r from-green-50/50 to-transparent p-4">
-                  <div className="text-3xl">⚡</div>
+                <div className="flex items-center gap-4 rounded-lg bg-green-50 p-4">
+                  <FaBolt className="text-2xl text-green-700" />
                   <div>
                     <p className="font-bold text-[#241816]">Instant Match</p>
                     <p className="text-sm text-[#674842]">
@@ -129,20 +135,19 @@ export default function Home() {
             {features.map((item) => (
               <article
                 key={item.title}
-                className="group relative h-full rounded-2xl bg-white p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ring-1 ring-[#f0d3cf]/50 overflow-hidden"
+                className="h-full rounded-lg border border-[#ecd7d2] bg-white p-8 shadow-sm transition hover:shadow-md"
               >
-                <div
-                  className={`absolute inset-0 bg-linear-to-br ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                ></div>
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-[#241816] group-hover:text-[#b42318] transition-colors">
+                <div className="flex size-11 items-center justify-center rounded-lg bg-red-50 text-[#b42318]">
+                  <item.icon className="text-xl" />
+                </div>
+                <div>
+                  <h3 className="mt-5 text-2xl font-bold text-[#241816]">
                     {item.title}
                   </h3>
                   <p className="mt-4 text-base leading-7 text-[#674842]">
                     {item.text}
                   </p>
                 </div>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-bl from-[#b42318]/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-300"></div>
               </article>
             ))}
           </div>
@@ -153,7 +158,7 @@ export default function Home() {
         <footer className="border-t border-[#f0d3cf] mt-20 py-12 text-[#674842]">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-2xl font-bold bg-linear-to-r from-[#b42318] to-[#8a1810] bg-clip-text text-transparent">
+              <p className="text-2xl font-bold text-[#b42318]">
                 BloodConnect
               </p>
               <p className="mt-2 text-sm">
