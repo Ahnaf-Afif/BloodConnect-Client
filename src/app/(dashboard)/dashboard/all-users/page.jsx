@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import EmptyState from "@/app/components/common/EmptyState";
 import LoadingSpinner from "@/app/components/common/LoadingSpinner";
 import RoleGuard from "@/app/components/auth/RoleGuard";
+import UsersTable from "@/app/components/users/UsersTable";
 import { api } from "@/lib/api";
 
 export default function AllUsersPage() {
@@ -13,13 +14,20 @@ export default function AllUsersPage() {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
   const [menuId, setMenuId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 5;
 
-  async function loadUsers() {
+  async function loadUsers(showLoading = true) {
     try {
-      setLoading(true);
-      const query = status ? `?status=${status}` : "";
+      if (showLoading) {
+        setLoading(true);
+      }
+
+      const query = makeQuery(page, limit, status);
       const result = await api.getAllUsers(query);
       setUsers(result.data.items);
+      setTotal(result.data.total);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -28,14 +36,17 @@ export default function AllUsersPage() {
   }
 
   useEffect(() => {
-    const query = status ? `?status=${status}` : "";
+    const query = makeQuery(page, limit, status);
 
     api
       .getAllUsers(query)
-      .then((result) => setUsers(result.data.items))
+      .then((result) => {
+        setUsers(result.data.items);
+        setTotal(result.data.total);
+      })
       .catch((error) => toast.error(error.message))
       .finally(() => setLoading(false));
-  }, [status]);
+  }, [page, status]);
 
   async function handleAction(action, userId) {
     try {
@@ -45,7 +56,7 @@ export default function AllUsersPage() {
       if (action === "admin") await api.makeAdmin(userId);
       toast.success("User updated");
       setMenuId(null);
-      loadUsers();
+      loadUsers(false);
     } catch (error) {
       toast.error(error.message);
     }
@@ -54,6 +65,8 @@ export default function AllUsersPage() {
   if (loading) {
     return <LoadingSpinner />;
   }
+
+  const totalPages = Math.ceil(total / limit);
 
   return (
     <RoleGuard roles={["admin"]}>
@@ -68,7 +81,10 @@ export default function AllUsersPage() {
         <select
           id="status"
           value={status}
-          onChange={(event) => setStatus(event.target.value)}
+          onChange={(event) => {
+            setStatus(event.target.value);
+            setPage(1);
+          }}
           className="rounded-md border border-[#e8c5bf] px-3 py-2"
         >
           <option value="">All</option>
@@ -81,93 +97,49 @@ export default function AllUsersPage() {
         {users.length === 0 ? (
           <EmptyState title="No users found" text="Try another filter." />
         ) : (
-          <div className="overflow-x-auto rounded-lg bg-white shadow-sm ring-1 ring-[#f0d3cf]">
-            <table className="min-w-full text-left text-sm">
-              <thead className="border-b border-[#f0d3cf] bg-[#fff3f0]">
-                <tr>
-                  <th className="px-4 py-3">Avatar</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Role</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id} className="border-b border-[#f0d3cf]">
-                    <td className="px-4 py-3">
-                      <span
-                        className="inline-block size-10 rounded-full bg-[#fff3f0] bg-cover bg-center"
-                        style={
-                          user.avatar
-                            ? { backgroundImage: `url(${user.avatar})` }
-                            : {}
-                        }
-                      />
-                    </td>
-                    <td className="px-4 py-3">{user.name}</td>
-                    <td className="px-4 py-3">{user.email}</td>
-                    <td className="px-4 py-3 capitalize">{user.role}</td>
-                    <td className="px-4 py-3 capitalize">{user.status}</td>
-                    <td className="relative px-4 py-3">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setMenuId(
-                            menuId === String(user._id) ? null : String(user._id)
-                          )
-                        }
-                        className="rounded border border-[#49312d] px-3 py-1 text-xs font-semibold"
-                      >
-                        ...
-                      </button>
-
-                      {menuId === String(user._id) && (
-                        <div className="absolute right-4 z-10 mt-1 w-40 rounded-md bg-white py-2 shadow-lg ring-1 ring-[#f0d3cf]">
-                          {user.status === "active" && (
-                            <button
-                              type="button"
-                              onClick={() => handleAction("block", user._id)}
-                              className="block w-full px-4 py-2 text-left text-sm hover:bg-[#fff3f0]"
-                            >
-                              Block
-                            </button>
-                          )}
-                          {user.status === "blocked" && (
-                            <button
-                              type="button"
-                              onClick={() => handleAction("unblock", user._id)}
-                              className="block w-full px-4 py-2 text-left text-sm hover:bg-[#fff3f0]"
-                            >
-                              Unblock
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => handleAction("volunteer", user._id)}
-                            className="block w-full px-4 py-2 text-left text-sm hover:bg-[#fff3f0]"
-                          >
-                            Make Volunteer
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleAction("admin", user._id)}
-                            className="block w-full px-4 py-2 text-left text-sm hover:bg-[#fff3f0]"
-                          >
-                            Make Admin
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <UsersTable
+            users={users}
+            menuId={menuId}
+            onMenuChange={setMenuId}
+            onAction={handleAction}
+          />
         )}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-6 flex items-center gap-3">
+          <button
+            type="button"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="rounded border border-[#b42318] px-3 py-1 text-sm font-semibold text-[#b42318] disabled:opacity-40"
+          >
+            Prev
+          </button>
+          <span className="text-sm text-[#674842]">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            type="button"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="rounded border border-[#b42318] px-3 py-1 text-sm font-semibold text-[#b42318] disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
+      )}
       </main>
     </RoleGuard>
   );
+}
+
+function makeQuery(page, limit, status) {
+  let query = `?page=${page}&limit=${limit}`;
+
+  if (status) {
+    query += `&status=${status}`;
+  }
+
+  return query;
 }

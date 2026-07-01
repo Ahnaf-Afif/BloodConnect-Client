@@ -12,6 +12,7 @@ const statusIcons = {
   active: FaCircleCheck,
   done: FaCircleCheck,
   inactive: FaBan,
+  blocked: FaBan,
   canceled: FaBan,
   pending: FaClock,
   inprogress: FaGear,
@@ -24,6 +25,7 @@ export default function StatusBadge({ status, variant = "default" }) {
       case "done":
         return "bg-green-100 text-green-700";
       case "inactive":
+      case "blocked":
       case "canceled":
         return "bg-red-100 text-red-700";
       case "pending":
