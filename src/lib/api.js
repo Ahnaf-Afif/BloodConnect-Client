@@ -1,16 +1,24 @@
-const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
+const serverUrl = (
+  process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000"
+).replace(/\/+$/, "");
 
 export async function apiRequest(path, options = {}) {
-  const response = await fetch(`${serverUrl}${path}`, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
+  let response;
 
-  const data = await response.json();
+  try {
+    response = await fetch(`${serverUrl}${path}`, {
+      ...options,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  } catch {
+    throw new Error("Server is unavailable");
+  }
+
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
     throw new Error(data.message || "Something went wrong");
