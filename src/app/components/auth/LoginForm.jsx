@@ -31,7 +31,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 grid gap-5">
-      <div className="rounded-2xl bg-linear-to-r from-[#fff5f3] to-[#fff8f6] p-4 ring-1 ring-[#f0d3cf]">
+      <div className="border-l-2 border-[#b42318] pl-4">
         <p className="flex items-center gap-2 text-sm font-semibold text-[#b42318]">
           <FaDroplet /> Secure access
         </p>
@@ -43,7 +43,7 @@ export default function LoginForm() {
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          className="text-sm font-semibold text-[#49312d]"
           htmlFor="email"
         >
           Email
@@ -54,14 +54,14 @@ export default function LoginForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+          className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
           placeholder="you@example.com"
         />
       </div>
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          className="text-sm font-semibold text-[#49312d]"
           htmlFor="password"
         >
           Password
@@ -72,7 +72,7 @@ export default function LoginForm() {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+          className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
           placeholder="******"
         />
       </div>
@@ -80,7 +80,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#b42318] to-[#8a1810] px-5 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-[#b42318] px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading ? "Logging in..." : "Login"}
         <FaArrowRight />

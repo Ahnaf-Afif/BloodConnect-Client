@@ -91,7 +91,7 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 grid gap-5">
-      <div className="rounded-2xl bg-linear-to-r from-[#fff5f3] to-[#fff8f6] p-4 ring-1 ring-[#f0d3cf]">
+      <div className="border-l-2 border-[#b42318] pl-4">
         <p className="flex items-center gap-2 text-sm font-semibold text-[#b42318]">
           <FaDroplet /> Join the community
         </p>
@@ -103,7 +103,7 @@ export default function RegisterForm() {
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          className="text-sm font-semibold text-[#49312d]"
           htmlFor="name"
         >
           Name
@@ -115,14 +115,14 @@ export default function RegisterForm() {
           onChange={handleChange}
           required
           maxLength={80}
-          className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+          className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
           placeholder="Your full name"
         />
       </div>
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          className="text-sm font-semibold text-[#49312d]"
           htmlFor="email"
         >
           Email
@@ -134,14 +134,14 @@ export default function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+          className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
           placeholder="you@example.com"
         />
       </div>
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+          className="text-sm font-semibold text-[#49312d]"
           htmlFor="avatar"
         >
           Avatar
@@ -152,14 +152,14 @@ export default function RegisterForm() {
           accept="image/*"
           required
           onChange={(event) => setAvatarFile(event.target.files[0])}
-          className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318]"
+          className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="grid gap-2">
           <label
-            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            className="text-sm font-semibold text-[#49312d]"
             htmlFor="bloodGroup"
           >
             Blood Group
@@ -170,7 +170,7 @@ export default function RegisterForm() {
             value={formData.bloodGroup}
             onChange={handleChange}
             required
-            className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+            className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
           >
             <option value="">Select</option>
             {bloodGroups.map((group) => (
@@ -201,7 +201,7 @@ export default function RegisterForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
           <label
-            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            className="text-sm font-semibold text-[#49312d]"
             htmlFor="password"
           >
             Password
@@ -214,14 +214,14 @@ export default function RegisterForm() {
             required
             value={formData.password}
             onChange={handleChange}
-            className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+            className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
             placeholder="******"
           />
         </div>
 
         <div className="grid gap-2">
           <label
-            className="text-sm font-semibold uppercase tracking-[0.2em] text-[#49312d]"
+            className="text-sm font-semibold text-[#49312d]"
             htmlFor="confirmPassword"
           >
             Confirm Password
@@ -234,7 +234,7 @@ export default function RegisterForm() {
             required
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="rounded-xl border-2 border-[#e8c5bf] bg-white px-4 py-3 outline-none transition focus:border-[#b42318] focus:ring-4 focus:ring-[#b42318]/10"
+            className="rounded-md border border-[#e8c5bf] bg-white px-4 py-3 outline-none focus:border-[#b42318]"
             placeholder="******"
           />
         </div>
@@ -243,7 +243,7 @@ export default function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#b42318] to-[#8a1810] px-5 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-[#b42318] px-5 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading ? "Creating account..." : "Create account"}
         <FaArrowRight />
