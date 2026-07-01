@@ -41,7 +41,7 @@ export default function DashboardSidebar() {
           <FaDroplet />
           BloodConnect
         </Link>
-        <div className="mt-4 flex items-center gap-3 rounded-xl bg-white/15 p-3">
+        <div className="mt-4 flex items-center gap-3 rounded-md bg-white/15 p-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
             <FaUsers />
           </div>
@@ -63,7 +63,7 @@ export default function DashboardSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${
+              className={`flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold transition ${
                 isActive
                   ? "bg-[#b42318] text-white shadow-md"
                   : "text-[#49312d] hover:bg-[#fff3f0]"
@@ -78,7 +78,7 @@ export default function DashboardSidebar() {
         <button
           type="button"
           onClick={handleLogout}
-          className="mt-2 flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-[#49312d] transition hover:bg-[#fff3f0]"
+          className="mt-2 flex items-center gap-3 rounded-md px-3 py-3 text-left text-sm font-semibold text-[#49312d] transition hover:bg-[#fff3f0]"
         >
           <FaRightFromBracket />
           Logout
