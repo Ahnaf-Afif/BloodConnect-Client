@@ -121,10 +121,10 @@ export const api = {
       body: JSON.stringify({ amount }),
     }),
 
-  confirmFund: (amount) =>
+  confirmFund: (sessionId) =>
     apiRequest("/api/funds/confirm", {
       method: "POST",
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ sessionId }),
     }),
 
   sendContact: (data) =>

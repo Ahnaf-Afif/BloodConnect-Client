@@ -35,11 +35,16 @@ export default function ContactSection() {
 
   return (
     <section className="py-16 mt-12">
-      <div className="rounded-3xl bg-gradient-to-r from-[#b42318] via-[#8a1810] to-[#b42318] p-12 md:p-16 shadow-2xl">
+      <div className="rounded-3xl bg-linear-to-r from-[#b42318] via-[#8a1810] to-[#b42318] p-12 md:p-16 shadow-2xl">
         <div className="grid gap-12 lg:grid-cols-2 items-center">
           <div className="text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
-            <p className="text-white/90 text-lg mb-6">Have questions? We're here to help you find the right donors or manage your blood donation requests.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Get in Touch
+            </h2>
+            <p className="text-white/90 text-lg mb-6">
+              Have questions? We&apos;re here to help you find the right donors or
+              manage your blood donation requests.
+            </p>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📞</span>
@@ -86,7 +91,7 @@ export default function ContactSection() {
             <button
               type="submit"
               disabled={sending}
-              className="rounded-lg bg-gradient-to-r from-[#b42318] to-[#8a1810] px-6 py-3 font-bold text-white hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50"
+              className="rounded-lg bg-linear-to-r from-[#b42318] to-[#8a1810] px-6 py-3 font-bold text-white hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50"
             >
               {sending ? "Sending..." : "Send Message"}
             </button>

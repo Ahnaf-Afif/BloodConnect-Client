@@ -37,9 +37,23 @@ export default function MyDonationRequestsPage() {
   }
 
   useEffect(() => {
-    if (!authLoading && user) {
-      loadRequests();
+    if (authLoading || !user) {
+      return;
     }
+
+    let query = `?page=${page}&limit=${limit}`;
+    if (status) {
+      query += `&status=${status}`;
+    }
+
+    api
+      .getMyDonationRequests(query)
+      .then((result) => {
+        setRequests(result.data.items);
+        setTotal(result.data.total);
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => setLoading(false));
   }, [authLoading, user, page, status]);
 
   if (authLoading || loading) {
@@ -51,12 +65,19 @@ export default function MyDonationRequestsPage() {
   return (
     <main className="mx-auto max-w-6xl px-5 py-10">
       <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#241816] to-[#b42318] bg-clip-text text-transparent">My Donation Requests</h1>
-        <p className="mt-3 text-lg text-[#674842]">Manage and track all your blood donation requests</p>
+        <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#241816] to-[#b42318] bg-clip-text text-transparent">
+          My Donation Requests
+        </h1>
+        <p className="mt-3 text-lg text-[#674842]">
+          Manage and track all your blood donation requests
+        </p>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <label className="text-sm font-semibold text-[#49312d]" htmlFor="status">
+        <label
+          className="text-sm font-semibold text-[#49312d]"
+          htmlFor="status"
+        >
           Filter by status
         </label>
         <select

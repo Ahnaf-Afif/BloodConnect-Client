@@ -28,20 +28,25 @@ export default function FundingContent() {
   }
 
   useEffect(() => {
-    loadFunds();
+    api
+      .getFunds()
+      .then((result) => setFunds(result.data))
+      .catch((error) => toast.error(error.message))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     const success = searchParams.get("success");
-    const paidAmount = searchParams.get("amount");
+    const sessionId = searchParams.get("session_id");
 
-    if (success === "true" && paidAmount) {
+    if (success === "true" && sessionId) {
       api
-        .confirmFund(Number(paidAmount))
+        .confirmFund(sessionId)
         .then(() => {
           toast.success("Thank you for your donation");
-          loadFunds();
+          return api.getFunds();
         })
+        .then((result) => setFunds(result.data))
         .catch((error) => toast.error(error.message));
     }
   }, [searchParams]);
@@ -55,17 +60,9 @@ export default function FundingContent() {
 
       if (result.data.url) {
         window.location.href = result.data.url;
-        return;
       }
-    } catch {
-      try {
-        await api.confirmFund(Number(amount));
-        toast.success("Fund added");
-        setAmount("");
-        loadFunds();
-      } catch (error) {
-        toast.error(error.message);
-      }
+    } catch (error) {
+      toast.error(error.message);
     } finally {
       setPaying(false);
     }

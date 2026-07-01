@@ -39,9 +39,23 @@ export default function AllBloodDonationRequestPage() {
   }
 
   useEffect(() => {
-    if (!authLoading && user) {
-      loadRequests();
+    if (authLoading || !user) {
+      return;
     }
+
+    let query = `?page=${page}&limit=${limit}`;
+    if (status) {
+      query += `&status=${status}`;
+    }
+
+    api
+      .getAllDonationRequests(query)
+      .then((result) => {
+        setRequests(result.data.items);
+        setTotal(result.data.total);
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => setLoading(false));
   }, [authLoading, user, page, status]);
 
   if (authLoading || loading) {

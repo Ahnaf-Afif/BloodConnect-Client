@@ -28,7 +28,13 @@ export default function AllUsersPage() {
   }
 
   useEffect(() => {
-    loadUsers();
+    const query = status ? `?status=${status}` : "";
+
+    api
+      .getAllUsers(query)
+      .then((result) => setUsers(result.data.items))
+      .catch((error) => toast.error(error.message))
+      .finally(() => setLoading(false));
   }, [status]);
 
   async function handleAction(action, userId) {
